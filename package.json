@@ -1,0 +1,45 @@
+{
+  "name": "bluff",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "env-cmd -f config/dev.env nodemon server/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pratham1002/bluff-2.git"
+  },
+  "author": "pratham1002",
+  "license": "ISC",
+  "engines": {
+    "node": "14.15.1"
+  },
+  "bugs": {
+    "url": "https://github.com/pratham1002/bluff-2/issues"
+  },
+  "dependencies": {
+    "admin-bro": "^3.3.1",
+    "admin-bro-expressjs": "^2.1.1",
+    "admin-bro-mongoose": "^0.5.2",
+    "axios": "^0.21.1",
+    "cookie-parser": "^1.4.5",
+    "express": "^4.17.1",
+    "express-formidable": "^1.2.0",
+    "googleapis": "^66.0.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongodb": "^3.6.3",
+    "mongoose": "^5.11.8",
+    "morgan": "^1.10.0",
+    "socket.io": "^3.0.4"
+  },
+  "devDependencies": {
+    "env-cmd": "^10.1.0",
+    "eslint": "^7.16.0",
+    "eslint-config-standard": "^16.0.2",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "nodemon": "^2.0.6"
+  }
+}
