@@ -29,8 +29,6 @@ const AdminBroMongoose = require('admin-bro-mongoose')
 // models
 const User = require('./models/user')
 
-User.find().then(user => console.log(user))
-
 // setup admin panel
 AdminBro.registerAdapter(AdminBroMongoose)
 
@@ -49,7 +47,9 @@ app.use(adminBro.options.rootPath, adminPanelRouter)
 const googleAuth = require('./oauth2/googleAuthRouters')
 
 app.use(googleAuth)
-
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/index.html'))
+})
 // Next 5 lines help in parsing input and getting req.body
 app.use(bodyParser.urlencoded({ extended: false }))
 // parse application/json
