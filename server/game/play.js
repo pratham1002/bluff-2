@@ -4,7 +4,8 @@ const {
   getGame,
   addUser,
   removeUser,
-  getUser
+  getUser,
+  users
 } = require('./users')
 
 io.on('connection', (socket) => {
@@ -14,48 +15,32 @@ io.on('connection', (socket) => {
   socket.on('join', (username, room, callback) => {
     try {
       console.log(username, ' joining ', room)
-      const { error, user } = addUser({ id: socket.id, username: username, room: room })
 
-      if (error) {
-        return callback(error)
-      }
-
+      const user = addUser(socket.id, username, room)
+      console.log(user.room)
       console.log('users in the room :' + getGame(user.room).players)
 
       socket.join(user.room)
+      callback()
     } catch (e) {
       console.log(e)
     }
   })
 
   // the game is started
-  // return cards to all players
+  // send cards to all players
   socket.on('start', (username) => {
+    console.log('starting game')
     const user = getUser(username)
     const game = getGame(user.room)
     const deck = game.start()
-    io.to(user.room).emit('start', deck)
-  })
 
-  socket.on('move', (username, initial, final) => {
-    const user = getUser(username)
-    // console.log(user.room)
-    socket.to(user.room).emit('opponentMoved', initial, final)
-    // callback();
-  })
-
-  socket.on('convert', (username, piece, choices, final, finalRow, finalCol) => {
-    const user = getUser(username)
-    // console.log(user.room)
-    socket.to(user.room).emit('opponentConverted', piece, choices, final, finalRow, finalCol)
-    // callback();
-  })
-
-  socket.on('end', (player) => {
-    // winner recieved from client side, run database changes here
+    game.players.forEach(player => io.to(user.id).emit('start', deck.draw(5)))
   })
 
   socket.on('disconnect', () => {
+    console.log(users)
     removeUser(socket.id)
+    console.log(users)
   })
 })

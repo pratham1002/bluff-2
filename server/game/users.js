@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 const Player = require('./Player')
 const Game = require('./Game')
 
@@ -57,13 +58,13 @@ const addUser = (id, username, room) => {
  */
 const removeUser = (id) => {
   // find the user by id
-  const user = users.find(u => u.id === id)
+  const user = users.find((u) => u.id === id)
 
   // remove users from list of users
   const index = users.findIndex((user) => user.id === id)
 
   if (index !== -1) {
-    return users.splice(index, 1)[0]
+    const _ = users.splice(index, 1)[0]
   }
 
   // remove user from game
@@ -86,5 +87,6 @@ module.exports = {
   getGame,
   addUser,
   removeUser,
-  getUser
+  getUser,
+  users
 }
