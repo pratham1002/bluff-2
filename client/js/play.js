@@ -66,7 +66,7 @@ class Game {
 
 document.addEventListener('DOMContentLoaded', () => {
   const game = new Game()
-  createRegistrationForm(game)
+  register(game)
 
   socket.on('start', (deck) => {
     game.cards = deck
