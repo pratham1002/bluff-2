@@ -15,6 +15,7 @@ function joinRoom (game) {
       if (error) {
         alert(error)
       } else {
+        document.getElementById('formSubmit').parentElement.removeChild(document.getElementById('formSubmit'))
         createStartButton()
         const $startButton = document.getElementById('startButton')
         $startButton.addEventListener('click', async (e) => {
@@ -31,5 +32,8 @@ function joinRoom (game) {
 
     // delete the form
     document.getElementById('registration').parentElement.removeChild(document.getElementById('registration'))
+    renderCards(game)
+    renderCheckButton(game)
+    renderTurnButton(game)
   })
 }
