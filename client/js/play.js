@@ -1,11 +1,41 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
-console.log(1)
 const socket = io()
 
-socket.emit('join', 'pratham', 'abc', () => {
-  socket.emit('start', 'pratham')
-})
+class Game {
+  constructor () {
+    this._name = ''
+    this._room = ''
+    this._cards = ''
+  }
 
-socket.on('start', (deck) => {
-  console.log(deck)
+  get name () {
+    return this._name
+  }
+
+  get room () {
+    return this._room
+  }
+
+  get cards () {
+    return this._cards
+  }
+
+  set name (name) {
+    this._name = name
+  }
+
+  set room (room) {
+    this._room = room
+  }
+
+  set cards (cards) {
+    this._cards = cards
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const game = new Game()
+  createRegistrationForm()
+  joinRoom(game)
 })

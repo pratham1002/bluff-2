@@ -37,11 +37,6 @@ const addUser = (id, username, room) => {
       games.push(game)
     }
 
-    // Check for existing user
-    if (game.players.includes(user => user.name === username)) {
-      throw new Error('Username is already in use')
-    }
-
     // Store user
     const user = new Player(id, username, room)
     game.addPlayer(user)
@@ -57,19 +52,36 @@ const addUser = (id, username, room) => {
  * @param {string} id
  */
 const removeUser = (id) => {
-  // find the user by id
-  const user = users.find((u) => u.id === id)
+  try {
+    // find the user by id
+    const user = users.find((u) => u.id === id)
 
+    // remove users from list of users
+    const index = users.findIndex((user) => user.id === id)
+
+    if (index !== -1) {
+      const _ = users.splice(index, 1)[0]
+    }
+
+    // remove user from game
+    const game = getGame(user.room)
+    game.removePlayer(user)
+
+    if (game.players.length === 0) {
+      removeGame(game)
+    }
+  } catch (e) {
+    console.log(e)
+  }
+}
+
+const removeGame = (g) => {
   // remove users from list of users
-  const index = users.findIndex((user) => user.id === id)
+  const index = games.findIndex((game) => g.name === game.name)
 
   if (index !== -1) {
-    const _ = users.splice(index, 1)[0]
+    const _ = games.splice(index, 1)[0]
   }
-
-  // remove user from game
-  const game = getGame(user.room)
-  game.removePlayer(user)
 }
 
 /**

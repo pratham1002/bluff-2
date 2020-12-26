@@ -17,13 +17,13 @@ io.on('connection', (socket) => {
       console.log(username, ' joining ', room)
 
       const user = addUser(socket.id, username, room)
-      console.log(user.room)
       console.log('users in the room :' + getGame(user.room).players)
 
       socket.join(user.room)
       callback()
     } catch (e) {
       console.log(e)
+      callback(e.message)
     }
   })
 
@@ -33,9 +33,9 @@ io.on('connection', (socket) => {
     console.log('starting game')
     const user = getUser(username)
     const game = getGame(user.room)
-    const deck = game.start()
+    game.start()
 
-    game.players.forEach(player => io.to(user.id).emit('start', deck.draw(5)))
+    game.players.forEach(player => io.to(player.id).emit('start', game.sendCards()))
   })
 
   socket.on('disconnect', () => {
