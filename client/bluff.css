@@ -1,0 +1,74 @@
+/* init */
+#root > div
+{
+  margin: 10px;
+  padding: 20px 50px;
+  border: 1px solid black;
+  border-radius: 10px;
+  box-shadow: 5px;
+}
+
+.Card{
+  cursor: pointer;
+  width: 120px;
+  box-sizing: border-box;
+  height: 170px;
+  padding: 10px;
+  background-color: white;
+  box-shadow: 2px 0px 10px 3px grey;
+  display: inline-block;
+  border-radius: 8px;
+  margin-left: -12px;      /* Card overlaping effect */
+  position: relative;
+  margin-bottom:5px;
+}
+
+.Card:hover{
+  z-index:1;
+  border: 3px solid red;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@500&display=swap');
+.cardRank{
+  font-family: 'Oswald', cursive;
+  padding: 2px;
+  margin: 1px 1px 1px 1px;
+  text-align: left;
+  font-size: 25px;
+  color: black;
+}
+
+.Joker, .hearts, .diamonds, .clubs, .spades {
+  padding: 2px;
+  margin: 1px 1px 1px 1px;
+  text-align: center;
+  font-size: 80px;
+}
+
+.hearts, .diamonds{
+  color: red;
+}
+
+.clubs, .spades, .Joker{
+  color: black;
+}
+
+button {
+  display: block;
+  background: #222;
+  height: 40px;
+  min-width: 150px;
+  border-radius: 10px;
+  border: solid white 2px;
+  color: #eee;
+  font-size: 20px;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding-top: 5px;
+  margin-bottom: 8px;
+  margin-top: 2px;
+  box-shadow: 0px 3px grey;
+}
+
