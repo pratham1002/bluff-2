@@ -68,6 +68,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const game = new Game()
   register(game)
 
+  socket.on('update-player-list', (players) => {
+    console.log('updating player list')
+    renderPlayerList(game.room, game.name, players)
+  })
+
   socket.on('start', (deck) => {
     game.cards = deck
     console.log(game)

@@ -20,6 +20,8 @@ io.on('connection', (socket) => {
       console.log('users in the room :' + getGame(user.room).players)
 
       socket.join(user.room)
+
+      io.sockets.in(user.room).emit('update-player-list', getGame(user.room).playerList)
       callback()
     } catch (e) {
       console.log(e)

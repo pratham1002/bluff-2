@@ -70,6 +70,8 @@ const removeUser = (id) => {
     if (game.players.length === 0) {
       removeGame(game)
     }
+
+    return user
   } catch (e) {
     console.log(e)
   }

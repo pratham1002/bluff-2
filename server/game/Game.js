@@ -21,6 +21,14 @@ class Game {
     return this._deck
   }
 
+  get playerList () {
+    const playerList = []
+
+    this._players.forEach(player => playerList.push(player.name))
+
+    return playerList
+  }
+
   /**
     @param: {player} player to be added
   */
