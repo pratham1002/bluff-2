@@ -42,6 +42,19 @@ class Game {
     this._selectedCards = selectedCards
   }
 
+  start () {
+    // delete the form
+    document.getElementById('registration').parentElement.removeChild(document.getElementById('registration'))
+
+    const $myCardsDiv = document.createElement('div')
+    $myCardsDiv.id = 'my-cards'
+    document.getElementById('root').appendChild($myCardsDiv)
+
+    renderCards(this)
+    renderCheckButton(this)
+    renderTurnButton(this)
+  }
+
   callBluff () {
     // handle bluff button clicks here
   }
@@ -53,6 +66,11 @@ class Game {
 
 document.addEventListener('DOMContentLoaded', () => {
   const game = new Game()
-  createRegistrationForm()
-  joinRoom(game)
+  createRegistrationForm(game)
+
+  socket.on('start', (deck) => {
+    game.cards = deck
+    console.log(game)
+    game.start()
+  })
 })
