@@ -40,6 +40,7 @@ class Game {
     } else {
       const playerList = []
       const records = []
+      let firstTurn = false
 
       this._players.forEach((player) => playerList.push({
         name: player.name,
@@ -54,13 +55,18 @@ class Game {
         }
       })
 
+      if (this._centralStack.length === 0) {
+        firstTurn = true
+      }
+
       return {
         playerList: playerList,
         totalCentralStackSize: this._centralStack.length,
         lastTurnSize: this._lastTurn.length,
         currentRank: this._currentRank,
         currentRound: records,
-        turn: this._players[this._turn].name
+        turn: this._players[this._turn].name,
+        firstTurn: firstTurn
       }
     }
   }
@@ -77,9 +83,15 @@ class Game {
    * add the cards to the central stack
    * @param {Player} player player who tried to move cards
    * @param {Array<Card>} cards the cards they moved
+   * @param {string} rank the rank of card player has played
    */
-  addToCentralStack (player, cards) {
+  addToCentralStack (player, cards, rank = this._currentRank) {
     this._verifyPlayer(player)
+
+    if (this._centralStack.length === 0) {
+      this._currentRank = rank
+    }
+
     this._centralStack = this._centralStack.concat(cards)
     this._lastTurn = [...cards]
 

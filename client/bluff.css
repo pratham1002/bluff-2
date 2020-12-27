@@ -72,3 +72,20 @@ button {
   box-shadow: 0px 3px grey;
 }
 
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 2; /* Sit on top */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: #ffffff;
+  top: 0;
+  left: 100px;
+}
+
+/* Modal Content/Box */
+.modal-content {
+  margin: 15% auto; /* 15% from the top and centered */
+  padding: 20px;
+  width: auto; /* Could be more or less, depending on screen size */
+}
+

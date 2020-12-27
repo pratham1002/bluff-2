@@ -5,8 +5,8 @@ const {
   getGame,
   addUser,
   removeUser,
-  getUser,
-  users
+  getUser
+  // users
 } = require('./users')
 
 io.on('connection', (socket) => {
@@ -56,14 +56,14 @@ io.on('connection', (socket) => {
     game.players.forEach(player => io.to(player.id).emit('update-game-state', game.state, player.cards))
   })
 
-  socket.on('turn', (cards, callback) => {
+  socket.on('turn', (cards, rank, callback) => {
     try {
       // verify that the the player whose turn it is has sent cards
       const user = getUser(socket.id)
       const game = getGame(user.room)
 
       // update game
-      game.addToCentralStack(user, cards)
+      game.addToCentralStack(user, cards, rank)
       game.addToRecord(user, cards)
       game.nextRound()
 
@@ -79,8 +79,13 @@ io.on('connection', (socket) => {
   })
 
   socket.on('disconnect', () => {
-    console.log(users)
-    removeUser(socket.id)
-    console.log(users)
+    try {
+      const user = getUser(socket.id)
+      const game = getGame(user.room)
+      removeUser(socket.id)
+      game.players.forEach(player => io.to(player.id).emit('update-game-state', game.state, player.cards))
+    } catch (e) {
+      console.log(e.message)
+    }
   })
 })

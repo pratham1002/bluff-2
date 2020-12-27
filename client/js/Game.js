@@ -109,13 +109,34 @@ class Game {
         return card
       })
 
-      socket.emit('turn', cards, (error) => {
-        if (error) {
-          alert(error)
-        } else {
-          this._selectedCards = []
+      if (this.state.firstTurn) {
+        document.getElementById('cards').style['pointer-events'] = 'none'
+        const $modal = document.getElementById('cardModal')
+        $modal.style.display = 'block'
+
+        // Adding an onClick to the submit button of the modal
+        document.getElementById('modal-submit').onclick = () => {
+          const rank = Array.from(document.getElementById('selectCard').options).find(option => option.selected).value
+
+          socket.emit('turn', cards, rank, (error) => {
+            if (error) {
+              alert(error)
+            } else {
+              this._selectedCards = []
+              // Removing the modal from the screen
+              $modal.style.display = 'none'
+            }
+          })
         }
-      })
+      } else {
+        socket.emit('turn', cards, null, (error) => {
+          if (error) {
+            alert(error)
+          } else {
+            this._selectedCards = []
+          }
+        })
+      }
     }
   }
 }
