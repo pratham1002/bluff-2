@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 /* eslint-disable no-unused-vars */
 
-function createStartButton (game) {
+function createStartButton () {
   const $registration = document.getElementById('registration')
 
   const button = document.createElement('button')
@@ -10,7 +10,7 @@ function createStartButton (game) {
 
   button.addEventListener('click', async (e) => {
     e.preventDefault()
-    await socket.emit('start', game.name)
+    await socket.emit('start')
   })
 
   $registration.appendChild(button)

@@ -2,11 +2,13 @@
 /* eslint-disable no-unused-vars */
 
 function register (game) {
-  const form = document.getElementById('registration-form')
+  const $form = document.getElementById('registration-form')
 
-  form.addEventListener('submit', async (e) => {
+  $form.addEventListener('submit', async (e) => {
     e.preventDefault()
-    document.getElementById('formSubmit').setAttribute('disabled', 'disabled')
+    const $formSubmit = document.getElementById('formSubmit')
+    $formSubmit.setAttribute('disabled', 'disabled')
+
     const $username = document.getElementById('username')
     const $room = document.getElementById('room')
     game.name = $username.value
@@ -16,8 +18,8 @@ function register (game) {
       if (error) {
         alert(error)
       } else {
-        document.getElementById('formSubmit').parentElement.removeChild(document.getElementById('formSubmit'))
-        createStartButton(game)
+        $formSubmit.remove()
+        createStartButton()
       }
     })
   })

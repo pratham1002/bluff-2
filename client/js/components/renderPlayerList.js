@@ -11,7 +11,7 @@ function renderPlayerList (room, name, players) {
 
   $list.innerHTML = ''
 
-  const $room = document.createElement('h1')
+  const $room = document.createElement('h3')
   $room.innerHTML = room + ' - ' + name
 
   $list.appendChild($room)

@@ -17,11 +17,12 @@ io.on('connection', (socket) => {
       console.log(username, ' joining ', room)
 
       const user = addUser(socket.id, username, room)
-      console.log('users in the room :' + getGame(user.room).players)
-
+      const game = getGame(user.room)
       socket.join(user.room)
 
-      io.sockets.in(user.room).emit('update-player-list', getGame(user.room).playerList)
+      console.log('number of players in the room :' + game.players.length)
+
+      game.players.forEach(player => io.to(player.id).emit('update-game-state', game.state, player.cards))
       callback()
     } catch (e) {
       console.log(e)
@@ -29,15 +30,36 @@ io.on('connection', (socket) => {
     }
   })
 
-  // the game is started
-  // send cards to all players
-  socket.on('start', (username) => {
-    console.log('starting game')
-    const user = getUser(username)
+  // the game has started: send cards to all players
+  socket.on('start', () => {
+    const user = getUser(socket.id)
     const game = getGame(user.room)
+
     game.start()
 
-    game.players.forEach(player => io.to(player.id).emit('start', game.sendCards()))
+    game.players.forEach(player => io.to(player.id).emit('start'))
+    game.players.forEach(player => io.to(player.id).emit('update-game-state', game.state, player.cards))
+  })
+
+  socket.on('call-bluff', () => {
+    // TODO: handle a bluff check
+    const user = getUser(socket.id)
+    const game = getGame(user.room)
+    game.players.forEach(player => io.to(player.id).emit('update-game-state', game.state, player.cards))
+  })
+
+  socket.on('pass', () => {
+    // TODO: handle pass
+    const user = getUser(socket.id)
+    const game = getGame(user.room)
+    game.players.forEach(player => io.to(player.id).emit('update-game-state', game.state, player.cards))
+  })
+
+  socket.on('turn', (cards) => {
+    // TODO: handle cards sent by a player
+    const user = getUser(socket.id)
+    const game = getGame(user.room)
+    game.players.forEach(player => io.to(player.id).emit('update-game-state', game.state, player.cards))
   })
 
   socket.on('disconnect', () => {

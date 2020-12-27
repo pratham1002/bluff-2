@@ -7,6 +7,11 @@ class Game {
     this._hasStarted = false
     this._deck = null
     this._sendCardsIndex = 0
+    this._centralStack = []
+    this._lastTurn = []
+    this._currentRank = undefined
+    this._currentRound = []
+    this._turn = undefined
   }
 
   get name () {
@@ -21,12 +26,30 @@ class Game {
     return this._deck
   }
 
-  get playerList () {
-    const playerList = []
+  get state () {
+    if (!this._hasStarted) {
+      const playerList = []
 
-    this._players.forEach(player => playerList.push(player.name))
+      this._players.forEach(player => playerList.push({ name: player.name }))
 
-    return playerList
+      return { playerList: playerList }
+    } else {
+      const playerList = []
+
+      this._players.forEach((player) => playerList.push({
+        name: player.name,
+        numberOfCards: player.cards.length
+      }))
+
+      return {
+        playerList: playerList,
+        totalCentralStackSize: this._centralStack.length,
+        lastTurnSize: this._lastTurn.length,
+        currentRank: this._currentRank,
+        currentRound: this._currentRound,
+        turn: this._turn
+      }
+    }
   }
 
   /**
@@ -63,14 +86,17 @@ class Game {
 
     this._hasStarted = true
     this._sendCardsIndex = 1
+    this._turn = 0
 
     const deck = this._getDeck()
     deck.shuffleAll()
 
     this._deck = deck
+
+    this._players.forEach(player => this.allocateCards())
   }
 
-  sendCards () {
+  allocateCards () {
     const numberOfPlayers = this._players.length
     const deckSize = this._deck.totalLength
     const numberOfCardsPerPlayer = Math.floor(deckSize / numberOfPlayers)

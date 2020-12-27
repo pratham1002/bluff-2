@@ -87,14 +87,11 @@ const removeGame = (g) => {
 }
 
 /**
-  @param: {string} username
+  @param: {string} id
   @return: {player} player
  */
-const getUser = (username) => {
-  username = username.trim().toLowerCase()
-  const user = users.find((user) => user.name === username)
-
-  return user
+const getUser = (id) => {
+  return users.find((user) => user.id === id)
 }
 
 module.exports = {
