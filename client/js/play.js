@@ -15,4 +15,9 @@ document.addEventListener('DOMContentLoaded', () => {
   socket.on('start', () => {
     game.start()
   })
+
+  socket.on('win', (name) => {
+    alert(name + 'wins')
+    window.reload()
+  })
 })

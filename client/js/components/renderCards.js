@@ -1,6 +1,17 @@
 /* eslint-disable no-unused-vars */
 
 function renderCards (game) {
+  let $myCardsDiv = document.getElementById('my-cards')
+
+  if (!$myCardsDiv) {
+    $myCardsDiv = document.createElement('div')
+    $myCardsDiv.id = 'my-cards'
+
+    document.getElementById('cards').appendChild($myCardsDiv)
+  }
+
+  $myCardsDiv.innerHTML = ''
+
   game.cards.forEach((card) => { renderCard(card, game) })
 }
 

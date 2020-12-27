@@ -1,3 +1,4 @@
+/* eslint-disable node/no-callback-literal */
 const { io } = require('../app')
 
 const {
@@ -55,10 +56,26 @@ io.on('connection', (socket) => {
     game.players.forEach(player => io.to(player.id).emit('update-game-state', game.state, player.cards))
   })
 
-  socket.on('turn', (cards) => {
+  socket.on('turn', (cards, callback) => {
     // TODO: handle cards sent by a player
+
+    // verify that the the player whose turn it is has sent cards
     const user = getUser(socket.id)
     const game = getGame(user.room)
+
+    console.log(game.players[game.turn].id, user.id)
+    if (game.players[game.turn].id !== user.id) {
+      callback('Not your turn')
+    }
+
+    // update game
+    game.addToCentralStack(cards, user)
+    game.nextRound()
+
+    // if (game.winner()) {
+    //   return io.sockets.in(user.room).emit('win', game.winner())
+    // }
+
     game.players.forEach(player => io.to(player.id).emit('update-game-state', game.state, player.cards))
   })
 

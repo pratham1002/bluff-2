@@ -60,23 +60,25 @@ class Game {
 
       renderPlayerList(this._room, this._name, players)
     } else {
-      document.getElementById('my-cards').innerHTML = ''
+      // render player names with number of cards
+      const players = []
+      state.playerList.forEach(player => players.push(player.name + ' - ' + player.numberOfCards))
+      renderPlayerList(this._room, this._name, players)
 
-      // render the cards box
+      // render current round details
+      renderCurrentRoundInfo(state.totalCentralStackSize, state.lastTurnSize, state.currentRank, state.currentRound, state.turn)
+
+      // render the cards
       renderCards(this)
       renderCheckButton(this)
       renderTurnButton(this)
 
-      // render player names with number of cards
-      const players = []
-
-      state.playerList.forEach(player => players.push(player.name + ' - ' + player.numberOfCards))
-
-      renderPlayerList(this._room, this._name, players)
-      // render central stack information
-      // renderCentralStack(state.totalCentralStackSize, state.lastTurnSize)
-      // render the current player turn and current rank
-      // renderCurrentRoundInfo(state.currentRank, state.currentRound, state.turn)
+      // if it not the turn of the current player disable clicks in the cards div
+      if (state.turn !== this._name) {
+        document.getElementById('cards').style['pointer-events'] = 'none'
+      } else {
+        document.getElementById('cards').style['pointer-events'] = 'auto'
+      }
     }
   }
 
@@ -85,9 +87,9 @@ class Game {
     // delete the form
     document.getElementById('registration').remove()
 
-    const $myCardsDiv = document.createElement('div')
-    $myCardsDiv.id = 'my-cards'
-    document.getElementById('root').appendChild($myCardsDiv)
+    const $cardsDiv = document.createElement('div')
+    $cardsDiv.id = 'cards'
+    document.getElementById('root').appendChild($cardsDiv)
   }
 
   callBluff () {
@@ -107,7 +109,11 @@ class Game {
         return card
       })
 
-      socket.emit('turn', cards)
+      socket.emit('turn', cards, (error) => {
+        if (error) {
+          alert(error)
+        }
+      })
     }
   }
 }

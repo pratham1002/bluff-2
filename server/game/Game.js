@@ -26,6 +26,10 @@ class Game {
     return this._deck
   }
 
+  get turn () {
+    return this._turn
+  }
+
   get state () {
     if (!this._hasStarted) {
       const playerList = []
@@ -47,9 +51,28 @@ class Game {
         lastTurnSize: this._lastTurn.length,
         currentRank: this._currentRank,
         currentRound: this._currentRound,
-        turn: this._turn
+        turn: this._players[this._turn].name
       }
     }
+  }
+
+  nextRound () {
+    this._turn = (this._turn + 1) % this._players.length
+  }
+
+  winner () {
+    // TODO: check for win condition: a player has zero cards and it is not his turn
+  }
+
+  addToCentralStack (cards, player) {
+    this._centralStack = this._centralStack.concat(cards)
+    this._lastTurn = [...cards]
+
+    for (let i = 0; i < cards.length; i++) {
+      player.cards = player.cards.filter(card => !(card.suit.name === cards[i].suit.name && card.rank.shortName === cards[i].rank.shortName))
+    }
+
+    console.log(player.cards.length)
   }
 
   /**

@@ -1,13 +1,18 @@
 /* eslint-disable no-undef */
 /* eslint-disable no-unused-vars */
 function renderTurnButton (game) {
-  const button = document.createElement('button')
-  button.innerHTML = 'Pass'
-  button.id = 'turnButton'
+  let $button = document.getElementById('turnButton')
 
-  button.addEventListener('click', () => {
+  if (!$button) {
+    $button = document.createElement('button')
+    $button.id = 'turnButton'
+
+    document.getElementById('cards').appendChild($button)
+  }
+
+  $button.innerHTML = 'Pass'
+
+  $button.addEventListener('click', () => {
     game.endTurn()
   })
-
-  document.getElementById('my-cards').appendChild(button)
 }
