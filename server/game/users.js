@@ -7,7 +7,7 @@ const users = []
 
 /**
  * @param {string} name
- * @return {Game} game
+ * @returns {Game}
  */
 const getGame = (name) => {
   return games.find(game => game.name === name)
@@ -17,6 +17,7 @@ const getGame = (name) => {
  * @param {string} id
  * @param {string} username
  * @param {string} room
+ * @returns {Player}
  */
 const addUser = (id, username, room) => {
   try {

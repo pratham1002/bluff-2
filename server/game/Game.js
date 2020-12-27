@@ -75,10 +75,11 @@ class Game {
 
   /**
    * add the cards to the central stack
-   * @param {Player} player
-   * @param {Array<Card>} cards
+   * @param {Player} player player who tried to move cards
+   * @param {Array<Card>} cards the cards they moved
    */
   addToCentralStack (player, cards) {
+    this._verifyPlayer(player)
     this._centralStack = this._centralStack.concat(cards)
     this._lastTurn = [...cards]
 
@@ -89,10 +90,11 @@ class Game {
 
   /**
    * Add entry to the current round record
-   * @param {Player} player
-   * @param {Array<Card>} cards
+   * @param {Player} player player who tried to make the move
+   * @param {Array<Card>} cards the cards they moved
    */
   addToRecord (player, cards) {
+    this._verifyPlayer(player)
     if (!cards) {
       this._currentRound.push({ player: player, cards: 'Pass' })
     } else {
@@ -122,8 +124,9 @@ class Game {
   }
 
   /**
-    @param: {Player} player to be removed
-  */
+   * remove player from the game
+   * @param {Player} p player to be removed from the game
+   */
   removePlayer (p) {
     this._players = this._players.filter(player => player.id !== p.id)
   }
@@ -143,6 +146,16 @@ class Game {
     this._deck = deck
 
     this._players.forEach(player => this._allocateCards())
+  }
+
+  /**
+   * verify that the player whose turn it is the one playing the cards
+   * @param {Player} player the player who tried to play the cards
+   */
+  _verifyPlayer (player) {
+    if (this._players[this._turn].id !== player.id) {
+      throw new Error('Not your turn')
+    }
   }
 
   _allocateCards () {

@@ -57,28 +57,25 @@ io.on('connection', (socket) => {
   })
 
   socket.on('turn', (cards, callback) => {
-    // TODO: handle cards sent by a player
+    try {
+      // verify that the the player whose turn it is has sent cards
+      const user = getUser(socket.id)
+      const game = getGame(user.room)
 
-    // verify that the the player whose turn it is has sent cards
-    const user = getUser(socket.id)
-    const game = getGame(user.room)
+      // update game
+      game.addToCentralStack(user, cards)
+      game.addToRecord(user, cards)
+      game.nextRound()
 
-    console.log(game.players[game.turn].id, user.id)
-    if (game.players[game.turn].id !== user.id) {
-      callback('Not your turn')
+      // if (game.winner()) {
+      //   return io.sockets.in(user.room).emit('win', game.winner())
+      // }
+
+      game.players.forEach(player => io.to(player.id).emit('update-game-state', game.state, player.cards))
+      callback()
+    } catch (e) {
+      callback(e.message)
     }
-
-    // update game
-    game.addToCentralStack(user, cards)
-    game.addToRecord(user, cards)
-    game.nextRound()
-
-    // if (game.winner()) {
-    //   return io.sockets.in(user.room).emit('win', game.winner())
-    // }
-
-    game.players.forEach(player => io.to(player.id).emit('update-game-state', game.state, player.cards))
-    callback()
   })
 
   socket.on('disconnect', () => {
