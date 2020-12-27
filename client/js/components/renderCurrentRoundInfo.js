@@ -13,9 +13,9 @@ function renderCurrentRoundInfo (centralStackSize, centralStackLast, rank, histo
 
   $roundInfo.innerHTML = centralStackSize + ' (' + centralStackLast + ')' + ' ' + rank + ' turn:' + turn
 
-  history.forEach((event) => {
+  history.forEach((event, index) => {
     const $eventDiv = document.createElement('div')
-    $eventDiv.innerHTML = event
+    $eventDiv.innerHTML = (index + 1) + '. ' + event
     $roundInfo.appendChild($eventDiv)
   })
 }

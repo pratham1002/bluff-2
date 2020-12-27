@@ -112,6 +112,8 @@ class Game {
       socket.emit('turn', cards, (error) => {
         if (error) {
           alert(error)
+        } else {
+          this._selectedCards = []
         }
       })
     }

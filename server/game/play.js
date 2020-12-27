@@ -69,7 +69,8 @@ io.on('connection', (socket) => {
     }
 
     // update game
-    game.addToCentralStack(cards, user)
+    game.addToCentralStack(user, cards)
+    game.addToRecord(user, cards)
     game.nextRound()
 
     // if (game.winner()) {
@@ -77,6 +78,7 @@ io.on('connection', (socket) => {
     // }
 
     game.players.forEach(player => io.to(player.id).emit('update-game-state', game.state, player.cards))
+    callback()
   })
 
   socket.on('disconnect', () => {

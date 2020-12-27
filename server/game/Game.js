@@ -39,18 +39,27 @@ class Game {
       return { playerList: playerList }
     } else {
       const playerList = []
+      const records = []
 
       this._players.forEach((player) => playerList.push({
         name: player.name,
         numberOfCards: player.cards.length
       }))
 
+      this._currentRound.forEach((record) => {
+        if (record.cards === 'Pass') {
+          records.push(record.player.name + ' passed.')
+        } else {
+          records.push(record.player.name + ' added ' + record.cards.length + ' cards.')
+        }
+      })
+
       return {
         playerList: playerList,
         totalCentralStackSize: this._centralStack.length,
         lastTurnSize: this._lastTurn.length,
         currentRank: this._currentRank,
-        currentRound: this._currentRound,
+        currentRound: records,
         turn: this._players[this._turn].name
       }
     }
@@ -64,20 +73,37 @@ class Game {
     // TODO: check for win condition: a player has zero cards and it is not his turn
   }
 
-  addToCentralStack (cards, player) {
+  /**
+   * add the cards to the central stack
+   * @param {Player} player
+   * @param {Array<Card>} cards
+   */
+  addToCentralStack (player, cards) {
     this._centralStack = this._centralStack.concat(cards)
     this._lastTurn = [...cards]
 
     for (let i = 0; i < cards.length; i++) {
       player.cards = player.cards.filter(card => !(card.suit.name === cards[i].suit.name && card.rank.shortName === cards[i].rank.shortName))
     }
-
-    console.log(player.cards.length)
   }
 
   /**
-    @param: {player} player to be added
-  */
+   * Add entry to the current round record
+   * @param {Player} player
+   * @param {Array<Card>} cards
+   */
+  addToRecord (player, cards) {
+    if (!cards) {
+      this._currentRound.push({ player: player, cards: 'Pass' })
+    } else {
+      this._currentRound.push({ player: player, cards: [...cards] })
+    }
+  }
+
+  /**
+   * add player to the game
+   * @param {Player} p player to be added
+   */
   addPlayer (p) {
     // check for max number of players
     if (this._players.length === 12) {
@@ -96,7 +122,7 @@ class Game {
   }
 
   /**
-    @param: {player} player to be removed
+    @param: {Player} player to be removed
   */
   removePlayer (p) {
     this._players = this._players.filter(player => player.id !== p.id)
@@ -116,10 +142,10 @@ class Game {
 
     this._deck = deck
 
-    this._players.forEach(player => this.allocateCards())
+    this._players.forEach(player => this._allocateCards())
   }
 
-  allocateCards () {
+  _allocateCards () {
     const numberOfPlayers = this._players.length
     const deckSize = this._deck.totalLength
     const numberOfCardsPerPlayer = Math.floor(deckSize / numberOfPlayers)
@@ -148,8 +174,6 @@ class Game {
     if (this._players.length > 10) {
       deck.merge(new decks.StandardDeck({ jokers: 2 }))
     }
-
-    console.log(deck.remainingLength, deck.totalLength)
 
     return deck
   }

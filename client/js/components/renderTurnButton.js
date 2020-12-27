@@ -7,12 +7,12 @@ function renderTurnButton (game) {
     $button = document.createElement('button')
     $button.id = 'turnButton'
 
+    $button.addEventListener('click', () => {
+      game.endTurn()
+    })
+
     document.getElementById('cards').appendChild($button)
   }
 
   $button.innerHTML = 'Pass'
-
-  $button.addEventListener('click', () => {
-    game.endTurn()
-  })
 }
