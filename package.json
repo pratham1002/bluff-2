@@ -23,7 +23,7 @@
     "admin-bro-expressjs": "^2.1.1",
     "admin-bro-mongoose": "^0.5.2",
     "axios": "^0.21.1",
-    "cards": "^1.0.3",
+    "cards": "^1.1.0",
     "cookie-parser": "^1.4.5",
     "express": "^4.17.1",
     "express-formidable": "^1.2.0",

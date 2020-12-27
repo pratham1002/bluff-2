@@ -118,18 +118,12 @@ class Game {
 
     // for more than 5 players add a deck
     if (this._players.length > 5) {
-      const deck2 = new decks.StandardDeck({ jokers: 2 })
-      for (let i = 1; i <= 54; i++) {
-        deck.add(deck2.draw()[0])
-      }
+      deck.merge(new decks.StandardDeck({ jokers: 2 }))
     }
 
     // for more than 10 players, add another deck
     if (this._players.length > 10) {
-      const extraDeck = new decks.StandardDeck({ jokers: 2 })
-      for (let i = 1; i <= 54; i++) {
-        deck.add(extraDeck.draw()[0])
-      }
+      deck.merge(new decks.StandardDeck({ jokers: 2 }))
     }
 
     console.log(deck.remainingLength, deck.totalLength)
