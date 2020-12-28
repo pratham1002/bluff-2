@@ -1,4 +1,6 @@
+/* eslint-disable no-undef */
 const { decks } = require('cards')
+const { io } = require('../app')
 
 class Game {
   constructor (name) {
@@ -73,13 +75,26 @@ class Game {
 
   playCards (player, cards, rank = this._currentRank) {
     this._verifyPlayer(player)
+
+    const lastNonPassTurn = this._currentRound.reverse().find((turn) => turn.cards !== 'Pass')
+
+    if (lastNonPassTurn && lastNonPassTurn.player.cards.length === 0) {
+      return io.sockets.in(player.room).emit('win', lastNonPassTurn.player.name)
+    }
+
     this._addToCentralStack(player, cards, rank)
     this._addToRecord(player, cards)
+
     this._nextTurn()
   }
 
   pass (player) {
     this._verifyPlayer(player)
+
+    if (player.cards.length === 0) {
+      return io.sockets.in(player.room).emit('win', player.name)
+    }
+
     this._addToRecord(player, null)
     this._nextTurn()
   }
@@ -97,6 +112,10 @@ class Game {
 
     if (bluffed) {
       lastNonPassTurn.player.cards = lastNonPassTurn.player.cards.concat(this._centralStack)
+
+      if (player.cards.length === 0) {
+        return io.sockets.in(player.room).emit('win', player.name)
+      }
     } else {
       player.cards = player.cards.concat(this._centralStack)
 
@@ -105,10 +124,6 @@ class Game {
     }
 
     this._resetRound()
-  }
-
-  winner () {
-    // TODO: check for win condition: a player has zero cards and it is not his turn
   }
 
   /**

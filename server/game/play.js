@@ -45,10 +45,6 @@ io.on('connection', (socket) => {
       // update game
       game.checkBluff(user)
 
-      // if (game.winner()) {
-      //   return io.sockets.in(user.room).emit('win', game.winner())
-      // }
-
       game.players.forEach(player => io.to(player.id).emit('update-game-state', game.state, player.cards))
       callback()
     } catch (e) {
@@ -64,10 +60,6 @@ io.on('connection', (socket) => {
       // update game
       game.pass(user)
 
-      // if (game.winner()) {
-      //   return io.sockets.in(user.room).emit('win', game.winner())
-      // }
-
       game.players.forEach(player => io.to(player.id).emit('update-game-state', game.state, player.cards))
       callback()
     } catch (e) {
@@ -82,10 +74,6 @@ io.on('connection', (socket) => {
 
       // update game
       game.playCards(user, cards, rank)
-
-      // if (game.winner()) {
-      //   return io.sockets.in(user.room).emit('win', game.winner())
-      // }
 
       game.players.forEach(player => io.to(player.id).emit('update-game-state', game.state, player.cards))
       callback()

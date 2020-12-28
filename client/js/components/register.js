@@ -11,8 +11,8 @@ function register (game) {
 
     const $username = document.getElementById('username')
     const $room = document.getElementById('room')
-    game.name = $username.value
-    game.room = $room.value
+    game.name = $username.value.trim().toLowerCase()
+    game.room = $room.value.trim().toLowerCase()
 
     await socket.emit('join', game.name, game.room, (error) => {
       if (error) {
