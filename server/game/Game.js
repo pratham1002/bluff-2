@@ -73,6 +73,21 @@ class Game {
 
   nextTurn () {
     this._turn = (this._turn + 1) % this._players.length
+
+    let count = 0
+
+    // count number of continuous passes
+    for (let i = this._currentRound.length - 1; i >= 0; i--) {
+      if (this._currentRound[i].cards === 'Pass') {
+        count++
+      } else {
+        break
+      }
+    }
+
+    if (count === this._players.length) {
+      this._resetRound()
+    }
   }
 
   winner () {
@@ -158,6 +173,13 @@ class Game {
     this._deck = deck
 
     this._players.forEach(player => this._allocateCards())
+  }
+
+  _resetRound () {
+    this._centralStack = []
+    this._lastTurn = []
+    this._currentRank = undefined
+    this._currentRound = []
   }
 
   /**
