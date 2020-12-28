@@ -71,62 +71,21 @@ class Game {
     }
   }
 
-  nextTurn () {
-    this._turn = (this._turn + 1) % this._players.length
+  playCards (player, cards, rank = this._currentRank) {
+    this._verifyPlayer(player)
+    this._addToCentralStack(player, cards, rank)
+    this._addToRecord(player, cards)
+    this._nextTurn()
+  }
 
-    let count = 0
-
-    // count number of continuous passes
-    for (let i = this._currentRound.length - 1; i >= 0; i--) {
-      if (this._currentRound[i].cards === 'Pass') {
-        count++
-      } else {
-        break
-      }
-    }
-
-    if (count === this._players.length) {
-      this._resetRound()
-    }
+  pass (player) {
+    this._verifyPlayer(player)
+    this._addToRecord(player, null)
+    this._nextTurn()
   }
 
   winner () {
     // TODO: check for win condition: a player has zero cards and it is not his turn
-  }
-
-  /**
-   * add the cards to the central stack
-   * @param {Player} player player who tried to move cards
-   * @param {Array<Card>} cards the cards they moved
-   * @param {string} rank the rank of card player has played
-   */
-  addToCentralStack (player, cards, rank = this._currentRank) {
-    this._verifyPlayer(player)
-
-    if (this._centralStack.length === 0) {
-      this._currentRank = rank
-    }
-
-    this._centralStack = this._centralStack.concat(cards)
-    this._lastTurn = [...cards]
-
-    for (let i = 0; i < cards.length; i++) {
-      player.cards = player.cards.filter(card => !(card.suit.name === cards[i].suit.name && card.rank.shortName === cards[i].rank.shortName))
-    }
-  }
-
-  /**
-   * Add entry to the current round record
-   * @param {Player} player player who tried to make the move
-   * @param {Array<Card>} cards the cards they moved
-   */
-  addToRecord (player, cards) {
-    this._verifyPlayer(player)
-    if (!cards) {
-      this._currentRound.push({ player: player, cards: 'Pass' })
-    } else {
-      this._currentRound.push({ player: player, cards: [...cards] })
-    }
   }
 
   /**
@@ -173,6 +132,57 @@ class Game {
     this._deck = deck
 
     this._players.forEach(player => this._allocateCards())
+  }
+
+  /**
+   * add the cards to the central stack
+   * @param {Player} player player who tried to move cards
+   * @param {Array<Card>} cards the cards they moved
+   * @param {string} rank the rank of card player has played
+   */
+  _addToCentralStack (player, cards, rank = this._currentRank) {
+    if (this._centralStack.length === 0) {
+      this._currentRank = rank
+    }
+
+    this._centralStack = this._centralStack.concat(cards)
+    this._lastTurn = [...cards]
+
+    for (let i = 0; i < cards.length; i++) {
+      player.cards = player.cards.filter(card => !(card.suit.name === cards[i].suit.name && card.rank.shortName === cards[i].rank.shortName))
+    }
+  }
+
+  /**
+   * Add entry to the current round record
+   * @param {Player} player player who tried to make the move
+   * @param {Array<Card>} cards the cards they moved
+   */
+  _addToRecord (player, cards) {
+    if (!cards) {
+      this._currentRound.push({ player: player, cards: 'Pass' })
+    } else {
+      this._currentRound.push({ player: player, cards: [...cards] })
+    }
+  }
+
+  _nextTurn () {
+    this._turn = (this._turn + 1) % this._players.length
+
+    let count = 0
+
+    // count number of continuous passes
+    for (let i = this._currentRound.length - 1; i >= 0; i--) {
+      if (this._currentRound[i].cards === 'Pass') {
+        count++
+      } else {
+        break
+      }
+    }
+
+    if (count === this._players.length) {
+      this._resetRound()
+    }
   }
 
   _resetRound () {

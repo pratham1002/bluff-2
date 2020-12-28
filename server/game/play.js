@@ -55,8 +55,7 @@ io.on('connection', (socket) => {
       const game = getGame(user.room)
 
       // update game
-      game.addToRecord(user, null)
-      game.nextTurn()
+      game.pass(user)
 
       game.players.forEach(player => io.to(player.id).emit('update-game-state', game.state, player.cards))
       callback()
@@ -71,9 +70,7 @@ io.on('connection', (socket) => {
       const game = getGame(user.room)
 
       // update game
-      game.addToCentralStack(user, cards, rank)
-      game.addToRecord(user, cards)
-      game.nextTurn()
+      game.playCards(user, cards, rank)
 
       // if (game.winner()) {
       //   return io.sockets.in(user.room).emit('win', game.winner())
