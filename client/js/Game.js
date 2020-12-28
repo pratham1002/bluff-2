@@ -78,6 +78,15 @@ class Game {
         document.getElementById('cards').style['pointer-events'] = 'none'
       } else {
         document.getElementById('cards').style['pointer-events'] = 'auto'
+
+        // if first turn then disable the check button
+        if (this.state.firstTurn) {
+          document.getElementById('checkButton').style['pointer-events'] = 'none'
+          document.getElementById('checkButton').disabled = true
+        } else {
+          document.getElementById('checkButton').style['pointer-events'] = 'auto'
+          document.getElementById('checkButton').disabled = false
+        }
       }
     }
   }
@@ -94,7 +103,13 @@ class Game {
 
   callBluff () {
     // handle bluff button clicks here
-    socket.emit('call-bluff')
+    socket.emit('call-bluff', (error) => {
+      if (error) {
+        alert(error)
+      } else {
+        this._selectedCards = []
+      }
+    })
   }
 
   endTurn () {

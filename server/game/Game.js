@@ -84,6 +84,26 @@ class Game {
     this._nextTurn()
   }
 
+  checkBluff (player) {
+    this._verifyPlayer(player)
+
+    if (this._centralStack.length === 0) {
+      throw new Error('cannot check bluff')
+    }
+
+    const lastNonPassTurn = this._currentRound.reverse().find((turn) => turn.cards !== 'Pass')
+
+    const bluffed = lastNonPassTurn.cards.find(card => (card.rank.shortName !== this._currentRank) && (card.rank.shortName !== 'Joker'))
+
+    if (bluffed) {
+      lastNonPassTurn.player.cards = lastNonPassTurn.player.cards.concat(this._centralStack)
+    } else {
+      player.cards = player.cards.concat(this._centralStack)
+    }
+
+    this._resetRound()
+  }
+
   winner () {
     // TODO: check for win condition: a player has zero cards and it is not his turn
   }

@@ -15,18 +15,13 @@ io.on('connection', (socket) => {
   // a new player enters the game room
   socket.on('join', (username, room, callback) => {
     try {
-      console.log(username, ' joining ', room)
-
       const user = addUser(socket.id, username, room)
       const game = getGame(user.room)
       socket.join(user.room)
 
-      console.log('number of players in the room :' + game.players.length)
-
       game.players.forEach(player => io.to(player.id).emit('update-game-state', game.state, player.cards))
       callback()
     } catch (e) {
-      console.log(e)
       callback(e.message)
     }
   })
@@ -42,11 +37,23 @@ io.on('connection', (socket) => {
     game.players.forEach(player => io.to(player.id).emit('update-game-state', game.state, player.cards))
   })
 
-  socket.on('call-bluff', () => {
-    // TODO: handle a bluff check
-    const user = getUser(socket.id)
-    const game = getGame(user.room)
-    game.players.forEach(player => io.to(player.id).emit('update-game-state', game.state, player.cards))
+  socket.on('call-bluff', (callback) => {
+    try {
+      const user = getUser(socket.id)
+      const game = getGame(user.room)
+
+      // update game
+      game.checkBluff(user)
+
+      // if (game.winner()) {
+      //   return io.sockets.in(user.room).emit('win', game.winner())
+      // }
+
+      game.players.forEach(player => io.to(player.id).emit('update-game-state', game.state, player.cards))
+      callback()
+    } catch (e) {
+      callback(e.message)
+    }
   })
 
   socket.on('pass', (callback) => {
@@ -56,6 +63,10 @@ io.on('connection', (socket) => {
 
       // update game
       game.pass(user)
+
+      // if (game.winner()) {
+      //   return io.sockets.in(user.room).emit('win', game.winner())
+      // }
 
       game.players.forEach(player => io.to(player.id).emit('update-game-state', game.state, player.cards))
       callback()
