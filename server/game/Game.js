@@ -99,6 +99,9 @@ class Game {
       lastNonPassTurn.player.cards = lastNonPassTurn.player.cards.concat(this._centralStack)
     } else {
       player.cards = player.cards.concat(this._centralStack)
+
+      // return turn to the player who had not bluffed
+      this._turn = this._players.findIndex(player => player.id === lastNonPassTurn.player.id)
     }
 
     this._resetRound()

@@ -76,16 +76,15 @@ class Game {
       // if it not the turn of the current player disable clicks in the cards div
       if (state.turn !== this._name) {
         document.getElementById('cards').style['pointer-events'] = 'none'
+        document.getElementById('checkButton').style['pointer-events'] = 'none'
       } else {
         document.getElementById('cards').style['pointer-events'] = 'auto'
 
         // if first turn then disable the check button
         if (this.state.firstTurn) {
           document.getElementById('checkButton').style['pointer-events'] = 'none'
-          document.getElementById('checkButton').disabled = true
         } else {
           document.getElementById('checkButton').style['pointer-events'] = 'auto'
-          document.getElementById('checkButton').disabled = false
         }
       }
     }
