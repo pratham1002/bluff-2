@@ -71,7 +71,7 @@ class Game {
     }
   }
 
-  nextRound () {
+  nextTurn () {
     this._turn = (this._turn + 1) % this._players.length
   }
 

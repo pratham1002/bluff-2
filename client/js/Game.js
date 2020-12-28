@@ -100,7 +100,13 @@ class Game {
   endTurn () {
     // handle sending of cards and passes here
     if (this._selectedCards.length === 0) {
-      socket.emit('pass')
+      socket.emit('pass', (error) => {
+        if (error) {
+          alert(error)
+        } else {
+          this._selectedCards = []
+        }
+      })
     } else {
       const cards = this._cards.filter(card => this.selectedCards.includes(card.id))
 

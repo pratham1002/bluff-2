@@ -49,23 +49,31 @@ io.on('connection', (socket) => {
     game.players.forEach(player => io.to(player.id).emit('update-game-state', game.state, player.cards))
   })
 
-  socket.on('pass', () => {
-    // TODO: handle pass
-    const user = getUser(socket.id)
-    const game = getGame(user.room)
-    game.players.forEach(player => io.to(player.id).emit('update-game-state', game.state, player.cards))
+  socket.on('pass', (callback) => {
+    try {
+      const user = getUser(socket.id)
+      const game = getGame(user.room)
+
+      // update game
+      game.addToRecord(user, null)
+      game.nextTurn()
+
+      game.players.forEach(player => io.to(player.id).emit('update-game-state', game.state, player.cards))
+      callback()
+    } catch (e) {
+      callback(e.message)
+    }
   })
 
   socket.on('turn', (cards, rank, callback) => {
     try {
-      // verify that the the player whose turn it is has sent cards
       const user = getUser(socket.id)
       const game = getGame(user.room)
 
       // update game
       game.addToCentralStack(user, cards, rank)
       game.addToRecord(user, cards)
-      game.nextRound()
+      game.nextTurn()
 
       // if (game.winner()) {
       //   return io.sockets.in(user.room).emit('win', game.winner())
