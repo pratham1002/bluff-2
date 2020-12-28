@@ -10,17 +10,17 @@
 
 .Card{
   cursor: pointer;
-  width: 120px;
+  width: 60px;
   box-sizing: border-box;
-  height: 170px;
-  padding: 10px;
+  height: 85px;
+  padding: 5px;
   background-color: white;
-  box-shadow: 2px 0px 10px 3px grey;
+  box-shadow: 1px 0px 5px 2px grey;
   display: inline-block;
-  border-radius: 8px;
-  margin-left: -12px;      /* Card overlaping effect */
+  border-radius: 4px;
+  margin-left: -6px;      /* Card overlaping effect */
   position: relative;
-  margin-bottom:5px;
+  margin-bottom:2px;
 }
 
 .Card:hover{
@@ -34,7 +34,7 @@
   padding: 2px;
   margin: 1px 1px 1px 1px;
   text-align: left;
-  font-size: 25px;
+  font-size: 12px;
   color: black;
 }
 
@@ -42,7 +42,7 @@
   padding: 2px;
   margin: 1px 1px 1px 1px;
   text-align: center;
-  font-size: 80px;
+  font-size: 40px;
 }
 
 .hearts, .diamonds{
@@ -79,7 +79,7 @@ button {
   overflow: auto; /* Enable scroll if needed */
   background-color: #ffffff;
   top: 0;
-  left: 100px;
+  left: 10%;
 }
 
 /* Modal Content/Box */

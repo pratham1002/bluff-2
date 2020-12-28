@@ -95,6 +95,10 @@ class Game {
     // delete the form
     document.getElementById('registration').remove()
 
+    const $roundInfo = document.createElement('div')
+    $roundInfo.id = 'round-info'
+    document.getElementById('root').appendChild($roundInfo)
+
     const $cardsDiv = document.createElement('div')
     $cardsDiv.id = 'cards'
     document.getElementById('root').appendChild($cardsDiv)
