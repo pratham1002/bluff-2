@@ -9,6 +9,7 @@ class Game {
     this._hasStarted = false
     this._deck = null
     this._sendCardsIndex = 0
+    this._cardId = 0
     this._centralStack = []
     this._lastTurn = []
     this._currentRank = undefined
@@ -187,7 +188,7 @@ class Game {
     this._lastTurn = [...cards]
 
     for (let i = 0; i < cards.length; i++) {
-      player.cards = player.cards.filter(card => !(card.suit.name === cards[i].suit.name && card.rank.shortName === cards[i].rank.shortName))
+      player.cards = player.cards.filter(card => !(card.id === cards[i].id))
     }
   }
 
@@ -250,6 +251,12 @@ class Game {
     if (this._sendCardsIndex <= deckSize % numberOfPlayers) {
       hand.push(this._deck.draw()[0])
     }
+
+    for (let i = 0; i < hand.length; i++) {
+      hand[i] = { ...hand[i] }
+      hand[i].id = String(this._cardId++)
+    }
+
     this._players[this._sendCardsIndex - 1].cards = hand
     this._sendCardsIndex++
 

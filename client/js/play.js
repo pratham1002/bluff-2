@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
   })
 
   socket.on('win', (name) => {
-    alert(name + 'wins')
+    alert(name + ' wins')
     location.reload()
   })
 })

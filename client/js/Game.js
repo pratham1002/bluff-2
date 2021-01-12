@@ -128,11 +128,6 @@ class Game {
     } else {
       const cards = this._cards.filter(card => this.selectedCards.includes(card.id))
 
-      cards.map(card => {
-        delete card.id
-        return card
-      })
-
       if (this.state.firstTurn) {
         document.getElementById('cards').style['pointer-events'] = 'none'
         const $modal = document.getElementById('cardModal')

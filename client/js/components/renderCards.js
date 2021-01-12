@@ -34,8 +34,7 @@ function renderCard (card, game) {
     cardSuit.className = 'Joker'
   }
 
-  newCard.id = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 10)
-  card.id = newCard.id
+  newCard.id = card.id
   newCard.className = 'Card'
   cardValue.className = 'cardRank'
 
