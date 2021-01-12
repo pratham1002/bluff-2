@@ -78,6 +78,7 @@ class Game {
     this._verifyPlayer(player)
 
     const lastNonPassTurn = this._currentRound.reverse().find((turn) => turn.cards !== 'Pass')
+    this._currentRound = this._currentRound.reverse()
 
     if (lastNonPassTurn && lastNonPassTurn.player.cards.length === 0) {
       return io.sockets.in(player.room).emit('win', lastNonPassTurn.player.name)
