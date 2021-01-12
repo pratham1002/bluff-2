@@ -109,6 +109,10 @@ class Game {
 
     const lastNonPassTurn = this._currentRound.reverse().find((turn) => turn.cards !== 'Pass')
 
+    if (lastNonPassTurn.player.id === player.id) {
+      throw new Error('cannot call bluff on yourself')
+    }
+
     const bluffed = lastNonPassTurn.cards.find(card => (card.rank.shortName !== this._currentRank) && (card.rank.shortName !== 'Joker'))
 
     if (bluffed) {
